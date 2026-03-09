@@ -154,8 +154,6 @@ public class HomeInventoryProgram {
                     " | Status: " + sale_status;
         }
 
-        // Getter method to allow other classes to access
-        // the inventory list safely
         public static ArrayList<Home> getInventory() {
 
             return homeInventory;
@@ -248,10 +246,7 @@ public class HomeInventoryProgram {
 
     }
 
-    // -------------------------------------------------
-    // Method: printToFile
-    // Writes the inventory list to a text file
-    // -------------------------------------------------
+    // printToFile: Writes the inventory list to a text file
     public static void printToFile() {
 
         try {
