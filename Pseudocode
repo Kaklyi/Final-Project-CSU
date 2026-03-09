@@ -1,0 +1,150 @@
+START PROGRAM
+
+DISPLAY program title "National Builder Home Inventory"
+
+CREATE empty list called homeInventory
+
+
+METHOD Constructor(square_feet, address, city, state, zip_code, model_name, sale_status)
+
+    STORE values in home object attributes
+
+END METHOD
+
+
+METHOD AddHome(newHome)
+
+    TRY
+        ADD newHome to homeInventory
+        RETURN "SUCCESS: Home added to inventory"
+    CATCH error
+        RETURN "FAILURE: Could not add home"
+
+END METHOD
+
+
+METHOD RemoveHome(address)
+
+    TRY
+        FOR each home in homeInventory
+
+            IF home.address equals address
+
+                REMOVE home from homeInventory
+                RETURN "SUCCESS: Home removed from inventory"
+
+        END FOR
+
+        RETURN "FAILURE: Home not found"
+
+    CATCH error
+        RETURN "FAILURE: Error removing home"
+
+END METHOD
+
+
+METHOD UpdateHomeStatus(address, newStatus)
+
+    TRY
+        FOR each home in homeInventory
+
+            IF home.address equals address
+
+                SET home.sale_status = newStatus
+                RETURN "SUCCESS: Sale status updated"
+
+        END FOR
+
+        RETURN "FAILURE: Home not found"
+
+    CATCH error
+        RETURN "FAILURE: Error updating home"
+
+END METHOD
+
+
+METHOD ListHomes
+
+    TRY
+        DISPLAY "Current Home Inventory"
+
+        IF homeInventory is empty
+            DISPLAY "No homes currently in inventory"
+
+        FOR each home in homeInventory
+
+            DISPLAY model name
+            DISPLAY square feet
+            DISPLAY address
+            DISPLAY city
+            DISPLAY state
+            DISPLAY zip code
+            DISPLAY sale status
+
+        END FOR
+
+    CATCH error
+        DISPLAY "Error displaying homes"
+
+END METHOD
+
+
+METHOD PrintToFile
+
+    TRY
+        OPEN file "Home.txt"
+
+        WRITE program title to file
+
+        FOR each home in homeInventory
+            WRITE home information to file
+        END FOR
+
+        CLOSE file
+
+    CATCH error
+        DISPLAY "Could not write file"
+
+END METHOD
+
+
+MAIN PROGRAM
+
+TRY
+
+    CREATE Home object with:
+        2500, "123 West Kings Hwy", "San Antonio", "TX", 78212,
+        "Modern Model", "available"
+
+    CALL AddHome
+
+    CALL ListHomes
+
+    CALL RemoveHome using "123 West Kings Hwy"
+
+    CREATE Home object with:
+        1950, "321 East Queen Ave", "Austin", "TX", 78121,
+        "Classic Model", "available"
+
+    CALL AddHome
+
+    CALL ListHomes
+
+    CALL UpdateHomeStatus using address "321 East Queen Ave"
+        change status to "sold"
+
+    CALL ListHomes
+
+    ASK user "Would you like to print the inventory to a file? (Y/N)"
+
+    IF user response = "Y"
+        CALL PrintToFile
+        DISPLAY confirmation message
+    ELSE
+        DISPLAY "File will not be printed"
+
+CATCH error
+
+    DISPLAY "A problem occurred in the program"
+
+END PROGRAM
